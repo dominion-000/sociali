@@ -2,7 +2,8 @@ import express from "express";
 import protect from "../middleware/auth.js";
 
 import {
- createPost
+ createPost,
+ getMyPosts
 }
 from "../controllers/post.controller.js";
 
@@ -13,6 +14,12 @@ router.post(
  "/",
  protect,
  createPost
+);
+
+router.get(
+ "/me",
+ protect,
+ getMyPosts
 );
 
 export default router;

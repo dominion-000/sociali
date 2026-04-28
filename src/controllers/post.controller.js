@@ -1,5 +1,6 @@
 import Post from "../models/Post.js";
 
+// create post
 export const createPost=
 async(req,res)=>{
 
@@ -22,6 +23,65 @@ await Post.create({
 res.status(201).json({
  success:true,
  data:post
+});
+
+}
+catch(err){
+
+res.status(500).json({
+ success:false,
+ message:err.message
+});
+
+}
+
+};
+
+// get posts
+export const getMyPosts =
+async (req,res)=>{
+
+try{
+
+const page=
+parseInt(req.query.page)||1;
+
+const limit=
+parseInt(req.query.limit)||20;
+
+const skip=
+(page-1)*limit;
+
+let filter={
+ author:req.user._id
+};
+
+if(req.query.state){
+ filter.state=
+ req.query.state;
+}
+
+const posts=
+await Post.find(filter)
+.sort({createdAt:-1})
+.skip(skip)
+.limit(limit);
+
+const total=
+await Post.countDocuments(
+ filter
+);
+
+res.json({
+ success:true,
+ data:posts,
+ pagination:{
+  page,
+  limit,
+  total_items:total,
+  total_pages:
+   Math.ceil(total/limit)
+ }
 });
 
 }
