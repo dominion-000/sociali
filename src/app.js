@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -15,5 +16,11 @@ app.get("/", (req, res) => {
     message: "Social API is running 🚀",
   });
 });
+
+// auth
+app.use(
+ "/api/v1/auth",
+ authRoutes
+);
 
 export default app;
