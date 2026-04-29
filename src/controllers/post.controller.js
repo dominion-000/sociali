@@ -136,3 +136,45 @@ res.status(500).json({
 }
 
 };
+
+// edit post
+export const updatePost=
+async(req,res)=>{
+
+try{
+
+const post=
+await Post.findOneAndUpdate(
+{
+ _id:req.params.id,
+ author:req.user._id
+},
+req.body,
+{
+ new:true
+}
+);
+
+if(!post){
+ return res.status(404).json({
+ success:false,
+ message:"Post not found"
+});
+}
+
+res.json({
+ success:true,
+ data:post
+});
+
+}
+catch(err){
+
+res.status(500).json({
+ success:false,
+ message:err.message
+});
+
+}
+
+};

@@ -4,7 +4,8 @@ import protect from "../middleware/auth.js";
 import {
  createPost,
  getMyPosts,
- publishPost
+ publishPost,
+ updatePost
 }
 from "../controllers/post.controller.js";
 
@@ -30,6 +31,13 @@ router.patch(
  "/:id/publish",
  protect,
  publishPost
+);
+
+// edit
+router.patch(
+ "/:id",
+ protect,
+ updatePost
 );
 
 export default router;
