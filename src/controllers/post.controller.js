@@ -95,3 +95,44 @@ res.status(500).json({
 }
 
 };
+
+// publish post
+export const publishPost=
+async(req,res)=>{
+
+try{
+
+const post=
+await Post.findOne({
+ _id:req.params.id,
+ author:req.user._id
+});
+
+if(!post){
+ return res.status(404).json({
+  success:false,
+  message:"Post not found"
+ });
+}
+
+post.state="published";
+
+await post.save();
+
+res.json({
+ success:true,
+ message:"Post published",
+ data:post
+});
+
+}
+catch(err){
+
+res.status(500).json({
+ success:false,
+ message:err.message
+});
+
+}
+
+};

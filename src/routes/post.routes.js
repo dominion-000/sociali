@@ -3,23 +3,33 @@ import protect from "../middleware/auth.js";
 
 import {
  createPost,
- getMyPosts
+ getMyPosts,
+ publishPost
 }
 from "../controllers/post.controller.js";
 
 const router=
 express.Router();
 
+// create post
 router.post(
  "/",
  protect,
  createPost
 );
 
+// me
 router.get(
  "/me",
  protect,
  getMyPosts
+);
+
+// publish
+router.patch(
+ "/:id/publish",
+ protect,
+ publishPost
 );
 
 export default router;
