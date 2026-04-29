@@ -178,3 +178,39 @@ res.status(500).json({
 }
 
 };
+
+// delete post
+export const deletePost=
+async(req,res)=>{
+
+try{
+
+const post=
+await Post.findOneAndDelete({
+ _id:req.params.id,
+ author:req.user._id
+});
+
+if(!post){
+ return res.status(404).json({
+ success:false,
+ message:"Post not found"
+ });
+}
+
+res.json({
+ success:true,
+ message:"Post deleted"
+});
+
+}
+catch(err){
+
+res.status(500).json({
+ success:false,
+ message:err.message
+});
+
+}
+
+};

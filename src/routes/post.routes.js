@@ -5,7 +5,8 @@ import {
  createPost,
  getMyPosts,
  publishPost,
- updatePost
+ updatePost,
+ deletePost
 }
 from "../controllers/post.controller.js";
 
@@ -38,6 +39,13 @@ router.patch(
  "/:id",
  protect,
  updatePost
+);
+
+// delete
+router.delete(
+ "/:id",
+ protect,
+ deletePost
 );
 
 export default router;
