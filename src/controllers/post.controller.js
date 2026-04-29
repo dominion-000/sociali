@@ -1,216 +1,341 @@
 import Post from "../models/Post.js";
 
 // create post
-export const createPost=
-async(req,res)=>{
+export const createPost =
+    async (req, res) => {
 
-try{
+        try {
 
-const {
- title,
- content,
- tags
-}=req.body;
+            const {
+                title,
+                content,
+                tags
+            } = req.body;
 
-const post=
-await Post.create({
- title,
- content,
- tags,
- author:req.user._id
-});
+            const post =
+                await Post.create({
+                    title,
+                    content,
+                    tags,
+                    author: req.user._id
+                });
 
-res.status(201).json({
- success:true,
- data:post
-});
+            res.status(201).json({
+                success: true,
+                data: post
+            });
 
-}
-catch(err){
+        }
+        catch (err) {
 
-res.status(500).json({
- success:false,
- message:err.message
-});
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
 
-}
+        }
 
-};
+    };
 
 // get posts
 export const getMyPosts =
-async (req,res)=>{
+    async (req, res) => {
 
-try{
+        try {
 
-const page=
-parseInt(req.query.page)||1;
+            const page =
+                parseInt(req.query.page) || 1;
 
-const limit=
-parseInt(req.query.limit)||20;
+            const limit =
+                parseInt(req.query.limit) || 20;
 
-const skip=
-(page-1)*limit;
+            const skip =
+                (page - 1) * limit;
 
-let filter={
- author:req.user._id
-};
+            let filter = {
+                author: req.user._id
+            };
 
-if(req.query.state){
- filter.state=
- req.query.state;
-}
+            if (req.query.state) {
+                filter.state =
+                    req.query.state;
+            }
 
-const posts=
-await Post.find(filter)
-.sort({createdAt:-1})
-.skip(skip)
-.limit(limit);
+            const posts =
+                await Post.find(filter)
+                    .sort({ createdAt: -1 })
+                    .skip(skip)
+                    .limit(limit);
 
-const total=
-await Post.countDocuments(
- filter
-);
+            const total =
+                await Post.countDocuments(
+                    filter
+                );
 
-res.json({
- success:true,
- data:posts,
- pagination:{
-  page,
-  limit,
-  total_items:total,
-  total_pages:
-   Math.ceil(total/limit)
- }
-});
+            res.json({
+                success: true,
+                data: posts,
+                pagination: {
+                    page,
+                    limit,
+                    total_items: total,
+                    total_pages:
+                        Math.ceil(total / limit)
+                }
+            });
 
-}
-catch(err){
+        }
+        catch (err) {
 
-res.status(500).json({
- success:false,
- message:err.message
-});
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
 
-}
+        }
 
-};
+    };
 
 // publish post
-export const publishPost=
-async(req,res)=>{
+export const publishPost =
+    async (req, res) => {
 
-try{
+        try {
 
-const post=
-await Post.findOne({
- _id:req.params.id,
- author:req.user._id
-});
+            const post =
+                await Post.findOne({
+                    _id: req.params.id,
+                    author: req.user._id
+                });
 
-if(!post){
- return res.status(404).json({
-  success:false,
-  message:"Post not found"
- });
-}
+            if (!post) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Post not found"
+                });
+            }
 
-post.state="published";
+            post.state = "published";
 
-await post.save();
+            await post.save();
 
-res.json({
- success:true,
- message:"Post published",
- data:post
-});
+            res.json({
+                success: true,
+                message: "Post published",
+                data: post
+            });
 
-}
-catch(err){
+        }
+        catch (err) {
 
-res.status(500).json({
- success:false,
- message:err.message
-});
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
 
-}
+        }
 
-};
+    };
 
 // edit post
-export const updatePost=
-async(req,res)=>{
+export const updatePost =
+    async (req, res) => {
 
-try{
+        try {
 
-const post=
-await Post.findOneAndUpdate(
-{
- _id:req.params.id,
- author:req.user._id
-},
-req.body,
-{
- new:true
-}
-);
+            const post =
+                await Post.findOneAndUpdate(
+                    {
+                        _id: req.params.id,
+                        author: req.user._id
+                    },
+                    req.body,
+                    {
+                        new: true
+                    }
+                );
 
-if(!post){
- return res.status(404).json({
- success:false,
- message:"Post not found"
-});
-}
+            if (!post) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Post not found"
+                });
+            }
 
-res.json({
- success:true,
- data:post
-});
+            res.json({
+                success: true,
+                data: post
+            });
 
-}
-catch(err){
+        }
+        catch (err) {
 
-res.status(500).json({
- success:false,
- message:err.message
-});
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
 
-}
+        }
 
-};
+    };
 
 // delete post
-export const deletePost=
-async(req,res)=>{
+export const deletePost =
+    async (req, res) => {
 
-try{
+        try {
 
-const post=
-await Post.findOneAndDelete({
- _id:req.params.id,
- author:req.user._id
-});
+            const post =
+                await Post.findOneAndDelete({
+                    _id: req.params.id,
+                    author: req.user._id
+                });
 
-if(!post){
- return res.status(404).json({
- success:false,
- message:"Post not found"
- });
-}
+            if (!post) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Post not found"
+                });
+            }
 
-res.json({
- success:true,
- message:"Post deleted"
-});
+            res.json({
+                success: true,
+                message: "Post deleted"
+            });
 
-}
-catch(err){
+        }
+        catch (err) {
 
-res.status(500).json({
- success:false,
- message:err.message
-});
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
 
-}
+        }
 
-};
+    };
+
+// public/published post
+export const getPublishedPosts =
+    async (req, res) => {
+
+        try {
+
+            const page =
+                parseInt(req.query.page) || 1;
+
+            const limit =
+                parseInt(req.query.limit) || 20;
+
+            const skip =
+                (page - 1) * limit;
+
+            let query = {
+                state: "published"
+            };
+
+            if (req.query.search) {
+
+                query.$or = [
+                    {
+                        title: {
+                            $regex: req.query.search,
+                            $options: "i"
+                        }
+                    },
+                    {
+                        tags: {
+                            $regex: req.query.search,
+                            $options: "i"
+                        }
+                    }
+                ];
+
+            }
+
+            let sort = { createdAt: -1 };
+
+            if (req.query.sort) {
+                sort[
+                    req.query.sort
+                ] = -1;
+            }
+
+            const posts =
+                await Post.find(query)
+                    .populate(
+                        "author",
+                        "username first_name last_name"
+                    )
+                    .sort(sort)
+                    .skip(skip)
+                    .limit(limit);
+
+            const total =
+                await Post.countDocuments(
+                    query
+                );
+
+            res.json({
+                success: true,
+                data: posts,
+                pagination: {
+                    page,
+                    limit,
+                    total_items: total,
+                    total_pages:
+                        Math.ceil(total / limit)
+                }
+            });
+
+        }
+        catch (err) {
+
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
+
+        }
+
+    };
+
+// single published post
+export const getSinglePost =
+    async (req, res) => {
+
+        try {
+
+            const post =
+                await Post.findOne({
+                    _id: req.params.id,
+                    state: "published"
+                })
+                    .populate(
+                        "author",
+                        "username first_name last_name"
+                    );
+
+            if (!post) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Post not found"
+                });
+            }
+
+            res.json({
+                success: true,
+                data: post
+            });
+
+        }
+        catch (err) {
+
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
+
+        }
+
+    };

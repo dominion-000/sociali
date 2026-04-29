@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
-import protect from "./middleware/auth.js";
 import postRoutes from "./routes/post.routes.js";
 
 const app = express();
@@ -12,23 +11,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // home
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Sociali is running 🚀",
-  });
+app.get("/", (res) => {
+    res.json({
+        success: true,
+        message: "Sociali is running 🚀",
+    });
 });
 
 // auth
 app.use(
- "/api/v1/auth",
- authRoutes
+    "/api/v1/auth",
+    authRoutes
 );
 
 // post
 app.use(
- "/api/v1/posts",
- postRoutes
+    "/api/v1/posts",
+    postRoutes
 );
 
 export default app;
