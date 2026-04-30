@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
             lowercase: true
         },
 
+        date_of_birth: {
+            type: Date
+        },
+
         password: {
             type: String,
             required: true,

@@ -114,3 +114,22 @@ export const getFollowers =
 
     };
 
+// list following
+export const getFollowing =
+    async (req, res) => {
+
+        const following =
+            await Follow.find({
+                follower: req.user._id
+            }).populate(
+                "following",
+                "username first_name last_name"
+            );
+
+        res.json({
+            success: true,
+            data: following
+        });
+
+    };
+

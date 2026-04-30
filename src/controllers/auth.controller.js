@@ -11,7 +11,8 @@ const {
  last_name,
  username,
  email,
- password
+ password,
+ date_of_birth
 }=req.body;
 
 const exists=
@@ -35,7 +36,8 @@ await User.create({
  last_name,
  username,
  email,
- password
+ password,
+ date_of_birth
 });
 
 res.status(201).json({
@@ -43,8 +45,11 @@ res.status(201).json({
  data:{
   user:{
    id:user._id,
+   first_name:user.first_name,
+   last_name:user.last_name,
    username:user.username,
-   email:user.email
+   email:user.email,
+   date_of_birth:user.date_of_birth
   },
  token:generateToken(
    user._id
@@ -91,7 +96,11 @@ res.json({
  data:{
   user:{
    id:user._id,
-   username:user.username
+   first_name:user.first_name,
+   last_name:user.last_name,
+   username:user.username,
+   email:user.email,
+   date_of_birth:user.date_of_birth
   },
   token:generateToken(
    user._id

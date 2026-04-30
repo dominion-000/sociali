@@ -9,6 +9,9 @@ import {
 }
     from "../controllers/follow.controller.js";
 
+import { getProfile, updateProfile }
+    from "../controllers/user.controller.js";
+
 const router =
     express.Router();
 
@@ -34,6 +37,18 @@ router.get(
     "/me/following",
     protect,
     getFollowing
+);
+
+router.get(
+    "/me",
+    protect,
+    getProfile
+);
+
+router.patch(
+    "/me",
+    protect,
+    updateProfile
 );
 
 export default router;
