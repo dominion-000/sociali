@@ -12,6 +12,12 @@ import {
 }
     from "../controllers/post.controller.js";
 
+import {
+    likePost,
+    unlikePost
+}
+    from "../controllers/like.controller.js";
+
 const router =
     express.Router();
 
@@ -62,4 +68,19 @@ router.get(
     getSinglePost
 );
 
+// like post
+router.post(
+    "/:id/like",
+    protect,
+    likePost
+);
+
+// unlike post
+router.delete(
+    "/:id/like",
+    protect,
+    unlikePost
+);
+
 export default router;
+
