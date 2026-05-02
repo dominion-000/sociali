@@ -1,4 +1,5 @@
 import Post from "../models/Post.js";
+import Follow from "../models/Follow.js";
 
 // create post
 export const createPost =
@@ -326,6 +327,84 @@ export const getSinglePost =
             res.json({
                 success: true,
                 data: post
+            });
+
+        }
+        catch (err) {
+
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
+
+        }
+
+    };
+
+
+export const getFeed =
+    async (req, res) => {
+
+        try {
+
+            const page =
+                parseInt(req.query.page) || 1;
+
+            const limit =
+                parseInt(req.query.limit) || 20;
+
+            const skip =
+                (page - 1) * limit;
+
+            // get users I follow
+            const following =
+                await Follow.find({
+                    follower: req.user._id
+                }).select("following");
+
+            // extract IDs
+            const followingIds =
+                following.map(f => f.following);
+
+            // include myself (optional but good UX)
+            followingIds.push(req.user._id);
+
+            // base query
+            const query = {
+                author: { $in: followingIds },
+                state: "published"
+            };
+
+            // sorting
+            let sort = { createdAt: -1 };
+
+            if (req.query.sort) {
+                sort[req.query.sort] = -1;
+            }
+
+            const posts =
+                await Post.find(query)
+                    .populate(
+                        "author",
+                        "username first_name last_name"
+                    )
+                    .sort(sort)
+                    .skip(skip)
+                    .limit(limit);
+
+            const total =
+                await Post.countDocuments(query);
+
+            res.json({
+                success: true,
+                data: posts,
+                pagination: {
+                    page,
+                    limit,
+                    total_items: total,
+                    total_pages:
+                        Math.ceil(total / limit)
+                }
             });
 
         }

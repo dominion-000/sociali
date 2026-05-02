@@ -8,7 +8,8 @@ import {
     updatePost,
     deletePost,
     getPublishedPosts,
-    getSinglePost
+    getSinglePost,
+    getFeed
 }
     from "../controllers/post.controller.js";
 
@@ -21,11 +22,16 @@ import {
 const router =
     express.Router();
 
-// me
+// personal
 router.get(
     "/me",
     protect,
     getMyPosts
+);
+router.get(
+    "/feed",
+    protect,
+    getFeed
 );
 
 // create post
