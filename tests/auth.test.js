@@ -13,30 +13,44 @@ describe("Auth Endpoints", () => {
     };
 
     it("should signup a user", async () => {
-
-        const res =
-            await request(app)
-                .post("/api/v1/auth/signup")
-                .send(userData);
+        const res = await request(app)
+            .post("/api/v1/auth/signup")
+            .send(userData);
 
         expect(res.statusCode).toBe(201);
         expect(res.body.data.token).toBeDefined();
+    });
 
+    it("should not signup with existing email", async () => {
+        const res = await request(app)
+            .post("/api/v1/auth/signup")
+            .send({
+                ...userData,
+                username: `different${unique}`
+            });
+        expect(res.statusCode).toBe(409);
     });
 
     it("should login user", async () => {
-
-        const res =
-            await request(app)
-                .post("/api/v1/auth/login")
-                .send({
-                    email: userData.email,
-                    password: userData.password
-                });
+        const res = await request(app)
+            .post("/api/v1/auth/login")
+            .send({
+                email: userData.email,
+                password: userData.password
+            });
 
         expect(res.statusCode).toBe(200);
         expect(res.body.data.token).toBeDefined();
+    });
 
+    it("should not login with wrong password", async () => {
+        const res = await request(app)
+            .post("/api/v1/auth/login")
+            .send({
+                email: userData.email,
+                password: "wrongpassword"
+            });
+        expect(res.statusCode).toBe(401);
     });
 
 });
