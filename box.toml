@@ -1,0 +1,33 @@
+# box.toml — Runbox environment declaration
+# https://github.com/dominionthedev/runbox
+
+[box]
+name = "sociali"
+version = "1"
+
+[env]
+# Variables injected into every Bubble and Session.
+# Host environment is NOT inherited (except PATH and system essentials).
+# KEY = "value"
+
+[tools]
+node = ">=20.0"
+
+[run]
+dir = "./"
+timeout = "60s"
+mode = "normal" # normal | capture | silent
+
+[shell]
+mode = "isolated" # isolated | partial | full
+
+[isolation]
+home = "./.runbox/home"
+binary_strategy = "hybrid" # local | system | hybrid
+# path = ["./scripts", "./.runbox/bin"]
+
+[sandbox]
+level = "medium" # weak | medium | strong | custom
+network = false
+# allow_read  = ["/usr", "/opt/local"]   # only used when level = "custom"
+# allow_write = ["./", "./.runbox/home/"]
