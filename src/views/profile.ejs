@@ -1,0 +1,76 @@
+<%- include('partials/header') %>
+
+<div class="card" style="padding: 30px; text-align: center;">
+    <div style="width: 100px; height: 100px; background-color: var(--primary); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+        <%= profileUser.username[0].toUpperCase() %>
+    </div>
+    <h1 style="margin: 0;"><%= profileUser.first_name %> <%= profileUser.last_name %></h1>
+    <p style="color: var(--text-muted); margin: 5px 0;">@<%= profileUser.username %></p>
+    
+    <% if (profileUser.bio) { %>
+        <p style="margin: 20px 0;"><%= profileUser.bio %></p>
+    <% } %>
+
+    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+        <div>
+            <div style="font-weight: bold; font-size: 1.2rem;"><%= profileUser.following_count || 0 %></div>
+            <div style="color: var(--text-muted); font-size: 0.9rem;">Following</div>
+        </div>
+        <div>
+            <div style="font-weight: bold; font-size: 1.2rem;"><%= profileUser.followers_count || 0 %></div>
+            <div style="color: var(--text-muted); font-size: 0.9rem;">Followers</div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <a href="/register" class="btn" style="padding: 10px 40px;">Follow</a>
+    </div>
+</div>
+
+<h3 style="margin: 30px 0 20px;">Posts by <%= profileUser.username %></h3>
+
+<div id="feed">
+    <% if (posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+            <div class="card">
+                <a href="/posts/<%= post._id %>" class="card-link">
+                    <div class="post-header">
+                        <span class="post-author"><%= profileUser.username %></span>
+                        <span class="post-date">• <%= new Date(post.createdAt).toLocaleDateString() %></span>
+                    </div>
+                    <h2 class="post-title"><%= post.title %></h2>
+                    <div class="post-content">
+                        <%= post.content.substring(0, 200) %><%= post.content.length > 200 ? '...' : '' %>
+                    </div>
+                </a>
+                
+                <% if (post.tags && post.tags.length > 0) { %>
+                    <div class="tags">
+                        <% post.tags.forEach(tag => { %>
+                            <a href="/?tag=<%= tag %>" class="tag">#<%= tag %></a>
+                        <% }) %>
+                    </div>
+                <% } %>
+
+                <div class="post-actions">
+                    <span>❤️ <%= post.like_count || 0 %></span>
+                    <span>💬 <%= post.comment_count || 0 %></span>
+                </div>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p style="text-align: center; color: var(--text-muted); margin-top: 20px;">No posts yet from this user.</p>
+    <% } %>
+</div>
+
+</main>
+<aside>
+    <div class="card">
+        <h3 class="sidebar-title">User Info</h3>
+        <p style="font-size: 0.9rem;"><strong>Joined:</strong> <%= new Date(profileUser.createdAt).toLocaleDateString() %></p>
+        <p style="font-size: 0.9rem;"><strong>Birthday:</strong> <%= profileUser.date_of_birth ? new Date(profileUser.date_of_birth).toLocaleDateString() : 'Hidden' %></p>
+    </div>
+</aside>
+</div>
+
+<%- include('partials/footer') %>

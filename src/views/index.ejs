@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<div class="sort-options">
+    <a href="/?sort=latest<%= query.search ? '&search='+query.search : '' %><%= query.tag ? '&tag='+query.tag : '' %>" class="<%= !query.sort || query.sort === 'latest' ? 'active' : '' %>">Latest</a>
+    <a href="/?sort=popular<%= query.search ? '&search='+query.search : '' %><%= query.tag ? '&tag='+query.tag : '' %>" class="<%= query.sort === 'popular' ? 'active' : '' %>">Popular</a>
+    <a href="/?sort=oldest<%= query.search ? '&search='+query.search : '' %><%= query.tag ? '&tag='+query.tag : '' %>" class="<%= query.sort === 'oldest' ? 'active' : '' %>">Oldest</a>
+</div>
+
+<% if (query.search) { %>
+    <p style="margin-bottom: 15px; color: var(--text-muted);">Results for: <strong><%= query.search %></strong></p>
+<% } %>
+
+<% if (query.tag) { %>
+    <p style="margin-bottom: 15px; color: var(--text-muted);">Tag: <span class="tag">#<%= query.tag %></span></p>
+<% } %>
+
+<div id="feed">
+    <% if (posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+            <div class="card">
+                <a href="/posts/<%= post._id %>" class="card-link">
+                <div class="post-header">
+                    <a href="/u/<%= post.author ? post.author.username : 'anonymous' %>" style="text-decoration: none; color: inherit;">
+                        <span class="post-author"><%= post.author ? post.author.username : 'Anonymous' %></span>
+                    </a>
+                    <span class="post-date">• <%= new Date(post.createdAt).toLocaleDateString() %></span>
+                </div>
+                    <h2 class="post-title"><%= post.title %></h2>
+                    <div class="post-content">
+                        <%= post.content.substring(0, 200) %><%= post.content.length > 200 ? '...' : '' %>
+                    </div>
+                </a>
+                
+                <% if (post.tags && post.tags.length > 0) { %>
+                    <div class="tags">
+                        <% post.tags.forEach(tag => { %>
+                            <a href="/?tag=<%= tag %>" class="tag">#<%= tag %></a>
+                        <% }) %>
+                    </div>
+                <% } %>
+
+                <div class="post-actions">
+                    <span>❤️ <%= post.like_count || 0 %></span>
+                    <span>💬 <%= post.comment_count || 0 %></span>
+                </div>
+            </div>
+        <% }) %>
+
+        <% if (pagination.totalPages > 1) { %>
+            <div class="pagination">
+                <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                    <a href="/?page=<%= i %><%= query.search ? '&search='+query.search : '' %><%= query.tag ? '&tag='+query.tag : '' %><%= query.sort ? '&sort='+query.sort : '' %>" 
+                       class="page-link <%= pagination.page === i ? 'active' : '' %>">
+                        <%= i %>
+                    </a>
+                <% } %>
+            </div>
+        <% } %>
+    <% } else { %>
+        <div class="card" style="text-align: center; padding: 40px;">
+            <p style="color: var(--text-muted);">No posts found.</p>
+            <a href="/" class="btn-outline btn" style="margin-top: 10px;">Clear all filters</a>
+        </div>
+    <% } %>
+</div>
+
+</main>
+<aside>
+    <div class="card">
+        <h3 class="sidebar-title">Trending Tags</h3>
+        <div class="tags">
+            <% if (allTags && allTags.length > 0) { %>
+                <% allTags.forEach(tag => { %>
+                    <a href="/?tag=<%= tag %>" class="tag">#<%= tag %></a>
+                <% }) %>
+            <% } else { %>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">No tags yet.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="sidebar-title">New to Sociali?</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Sign up now to get your own personalized timeline!</p>
+        <a href="/register" class="btn" style="width: 100%; text-align: center; box-sizing: border-box;">Create account</a>
+    </div>
+</aside>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<div class="card" style="padding: 30px;">
+    <div class="post-header">
+        <a href="/u/<%= post.author ? post.author.username : 'anonymous' %>" style="text-decoration: none; color: inherit;">
+            <span class="post-author" style="font-size: 1.1rem;"><%= post.author ? post.author.username : 'Anonymous' %></span>
+        </a>
+        <span class="post-date">• <%= new Date(post.createdAt).toLocaleString() %></span>
+    </div>
+    
+    <h1 style="font-size: 2rem; margin-top: 10px; margin-bottom: 20px;"><%= post.title %></h1>
+    
+    <div class="post-content" style="font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
+        <%= post.content %>
+    </div>
+    
+    <% if (post.tags && post.tags.length > 0) { %>
+        <div class="tags" style="margin-top: 20px;">
+            <% post.tags.forEach(tag => { %>
+                <a href="/?tag=<%= tag %>" class="tag">#<%= tag %></a>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <div class="post-actions" style="margin-top: 20px; font-size: 1rem;">
+        <span>❤️ <%= post.like_count || 0 %> Likes</span>
+        <span>💬 <%= post.comment_count || 0 %> Comments</span>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="/" class="btn-outline btn">← Back to Feed</a>
+</div>
+
+</main>
+<aside>
+    <div class="card">
+        <h3 class="sidebar-title">About the Author</h3>
+        <p><strong><%= post.author ? post.author.username : 'Anonymous' %></strong></p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Joined Sociali to share amazing thoughts.</p>
+        <a href="/register" class="btn" style="width: 100%; text-align: center; box-sizing: border-box; margin-top: 10px;">Follow</a>
+    </div>
+</aside>
+</div>
+
+<%- include('partials/footer') %>

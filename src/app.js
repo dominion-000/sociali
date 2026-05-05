@@ -1,9 +1,15 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import uiRoutes from "./routes/ui.routes.js";
 import errorHandler from "./middleware/error.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -11,6 +17,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// view engine setup
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // request logger
 app.use((req, res, next) => {
@@ -25,13 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// home
-app.get("/", (req, res) => {
-    res.json({
-        success: true,
-        message: "Sociali is running 🚀",
-    });
-});
+// UI Routes
+app.use("/", uiRoutes);
 
 // auth
 app.use(

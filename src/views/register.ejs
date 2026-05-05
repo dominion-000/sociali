@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<div class="card" style="max-width: 400px; margin: 0 auto;">
+    <h2 style="text-align: center;">Join Sociali</h2>
+    
+    <% if (typeof error !== 'undefined') { %>
+        <div class="error"><%= error %></div>
+    <% } %>
+
+    <form action="/api/v1/auth/signup" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Register</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 15px;">
+        Already have an account? <a href="/login">Login</a>
+    </p>
+</div>
+
+</main>
+<aside>
+    <div class="card">
+        <h3 class="sidebar-title">Join the Community</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Create an account to share your thoughts, follow your favorite creators, and stay updated.</p>
+    </div>
+</aside>
+</div>
+
+<%- include('partials/footer') %>

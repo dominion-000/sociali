@@ -9,11 +9,13 @@ import {
 }
     from "../controllers/follow.controller.js";
 
-import { getProfile, updateProfile }
+import { getProfile, updateProfile, getUserProfile }
     from "../controllers/user.controller.js";
 
 const router =
     express.Router();
+
+router.get("/profile/:username", getUserProfile);
 
 router.post(
     "/:id/follow",
